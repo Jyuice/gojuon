@@ -1,0 +1,21 @@
+window.onload = function() {
+    class Game {
+        constructor() {
+            this.difficulty = 0 // 三個等級 0 1 2
+        }
+
+        changeDifficulty(e) {
+            const el = e.target
+            el.className += 'active'
+        }
+
+        clearUnactive() {
+            document.getElementsByClassName('active')[0].className = ''
+        }
+    }
+
+    let g = new Game()
+    const nav = document.querySelector('#nav')
+    nav.addEventListener('click', e => g.changeDifficulty(e))
+    nav.removeEventListener('click', g.changeDifficulty)
+}

@@ -1,0 +1,40 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    color: aliceblue;
+    background: rgb(3, 14, 29);
+}
+
+// @media (max-width: 960px) {
+//     body {
+//         background-image: url('./static/background-col.jpg');
+//     }
+// }
+
+// @media (min-width: 960px) and (max-width: 1920px) {
+//     body {
+//         background-image: url('./static/background-row.jpg');
+//     }       
+// }
+
+#container {
+    #nav {
+        margin-top: 50px;
+        margin-left: 100px;
+        font-weight: bolder;
+        font-size: 1.2em;
+    }
+    #bottom-img {
+        position: absolute;
+        width: 300px;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        >img {
+            width: 100%;
+        }
+    }
+}

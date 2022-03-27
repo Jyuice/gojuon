@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>融合效果</title>
+    <style type="text/css">
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      .wrap {
+        position: relative;
+        filter: contrast(20);
+        background: #fff;
+        overflow: hidden;
+        height: 100vh;
+      }
+      /* .left {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        filter: blur(6px);
+        background-color: black;
+        position: absolute;
+        left: 0;
+        animation: move 10s infinite alternate;
+      }
+
+      @keyframes move {
+        from {
+          top: 0;
+        } to {
+          top: 100vh
+        }
+      } */
+
+      .left::before,
+      .left::after,
+      .mid::before,
+      .mid::after,
+      .right::before,
+      .right::after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 85%;
+        transform-origin: center;
+        width: 800px;
+        height: 800px;
+        animation-name: wave;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+      }
+
+      .left::before,
+      .mid::before,
+      .right::before {
+        border-radius: 48%;
+        background-color: yellow;
+        animation-duration: 5s;
+      }
+
+      .left::after,
+      .mid::after,
+      .right::after {
+        opacity: 0.3;
+        border-radius: 40%;
+        background-color: yellow;
+        animation-duration: 5s;
+      }
+
+      .left::before,
+      .left::after {
+        left: 15%;
+        animation-duration: 8s;
+      }
+
+      .mid::before,
+      .mid::after{
+        left:50%;
+        animation-duration: 10s;
+      }
+
+      @keyframes wave {
+        0% {
+          transform: translate(-45%, 97%) rotateZ(0deg);
+        }
+        50% {
+          transform: translate(-45%, 100%) rotateZ(180deg);
+        }
+        100% {
+          transform: translate(-45%, 97%) rotateZ(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="up"></div>
+      <div class="left"></div>
+      <div class="mid"></div>
+      <div class="right"></div>
+    </div>
+  </body>
+</html>

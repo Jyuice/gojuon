@@ -1,0 +1,48 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background-size: 100%;
+}
+
+@media (max-width: 960px) {
+    body {
+        background-image: url('./static/background-col.jpg');
+    }
+}
+
+@media (min-width: 960px) and (max-width: 1920px) {
+    body {
+        background-image: url('./static/background-row.jpg');
+    }       
+}
+#container {
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, .5);
+
+    #start-model {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 40%;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: inset rgba(255, 255, 255, .5) 1px 1px 1px 1px;
+        background: linear-gradient(45deg, rgba(252, 234, 187, .6), rgb(248, 181, 0, .6));
+        #text {
+            color: aliceblue;
+            font-weight: bolder;
+        }
+        #diff-btn {
+            display: block;
+            outline: none;
+            border: none;
+            border-radius: 50%;
+            width: 90%;
+        }
+    }
+}

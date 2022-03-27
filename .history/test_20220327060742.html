@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>融合效果</title>
+    <style type="text/css">
+      /* .wrap {
+        filter: contrast(20);
+        background: #fff;
+        overflow: hidden;
+        padding: 10px;
+      }
+      .left,
+      .right {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        filter: blur(6px);
+      }
+      .left {
+        background-color: black;
+        position: absolute;
+        left: 0;
+        animation: move 10s infinite alternate;
+      }
+      @keyframes move {
+        100% {
+          left: 250px;
+        }
+      } */
+      .right {
+        /* position: absolute; */
+        background-color: red;
+        /* bottom: 0; */
+        min-height: 100vh;
+      }
+
+      /* .right::before,
+      .right::after {
+        content: '';
+        display: block;
+        position: absolute;
+        width: 100px;
+        height: 10px;
+      } */
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="left"></div>
+      <div class="right"></div>
+    </div>
+  </body>
+</html>

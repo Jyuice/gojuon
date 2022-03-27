@@ -1,0 +1,237 @@
+@lightColor: rgb(137, 166, 206);
+@middleColor: rgb(81, 127, 190);
+@darkColor: rgb(35, 71, 121);
+@midDarkColor: rgb(24, 45, 73);
+@deepDarkColor: rgb(4, 19, 39);
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    color: aliceblue;
+    overflow: hidden;
+}
+
+.light {
+    background-color: @lightColor;
+}
+
+.middle {
+    background-color: @middleColor;
+}
+
+.dark {
+    background-color: @darkColor;
+}
+
+.mdark {
+    background-color: @midDarkColor;
+}
+
+.ddark {
+    background-color: @deepDarkColor;
+}
+
+.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#container {
+    #home {
+        #nav {
+            display: flex;
+            padding-top: 50px;
+            padding-left: 100px;
+            padding-bottom: 30px;
+            font-weight: bolder;
+            font-size: 1.2em;
+
+            #nav-item {
+                margin-right: 60px;
+                cursor: pointer;
+            }
+
+            .active {
+                border-bottom: 2px solid #fff;
+            }
+        }
+
+        .light {
+            background-color: @lightColor;
+            box-shadow: darken(@lightColor, 10%) 4px 4px 8px 4px;
+        }
+
+        .middle {
+            background-color: @middleColor;
+            box-shadow: darken(@middleColor, 10%) 4px 4px 8px 4px;
+        }
+
+        .dark {
+            background-color: @darkColor;
+            box-shadow: darken(@darkColor, 10%) 4px 4px 8px 4px;
+        }
+
+        .mdark {
+            background-color: @midDarkColor;
+            box-shadow: darken(@midDarkColor, 10%) 4px 4px 8px 4px;
+        }
+
+        .ddark {
+            background-color: @deepDarkColor;
+            box-shadow: darken(@deepDarkColor, 10%) 4px 4px 8px 4px;
+        }
+
+        #bottom-img {
+            position: absolute;
+            width: 300px;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+
+            >img {
+                width: 100%;
+            }
+        }
+
+        #main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 40vh;
+            font-weight: bolder;
+
+            #text {
+                font-size: 4em;
+            }
+
+            #btn {
+                margin-top: 30px;
+                padding: 10px 20px;
+                background-color: #fff;
+                border-radius: 30px;
+                color: rgb(3, 14, 29);
+                font-size: 1.5em;
+                cursor: pointer;
+            }
+        }
+    }
+
+    #ready-page {
+        display: none;
+
+        .interval {
+            font-size: 6em;
+            border: 5px solid aliceblue;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 200px;
+        }
+    }
+
+    #game-page {
+
+        // display: none;
+        #ground {
+            position: absolute;
+            bottom: 0;
+
+            .wave {
+                // position: relative;
+                align-items: center;
+                // bottom: 0;
+                // width: 100vw;
+                // height: 10vh;
+                min-height: 100vh;
+                background-color: #fff;
+                overflow: hidden;
+
+                &:before,
+                &:after {
+                    content: "";
+                    position: absolute;
+                    left: 80%;
+                    bottom: -130px;
+                    min-width: 350vw;
+                    min-height: 350vw;
+                    background-color: #fff;
+                    animation-name: wave;
+                    animation-iteration-count: infinite;
+                    animation-timing-function: linear;
+                }
+
+                &:before {
+                    bottom: 5vh;
+                    border-radius: 45%;
+                    animation-duration: 10s;
+                }
+
+                &:after {
+                    bottom: 2vh;
+                    opacity: .5;
+                    border-radius: 47%;
+                    animation-duration: 10s;
+                }
+            }
+        }
+    }
+}
+
+.slide-up {
+    animation: slideUp .5s ease forwards;
+}
+
+.slide-down {
+    animation: slideDown .5s ease forwards;
+}
+
+.fade-out {
+    animation: fadeOut .5s ease forwards;
+}
+
+.ripple {
+    animation: ripple 1s ease forwards;
+}
+
+@keyframes slideUp {
+    to {
+        margin-top: -200px;
+    }
+}
+
+@keyframes slideDown {
+    to {
+        margin-bottom: -400px;
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes ripple {
+    to {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+    }
+}
+
+@keyframes wave {
+    0% {
+        transform: translate(-50%, 0) rotateZ(0deg);
+    }
+    50% {
+        transform: translate(-50%, -2%) rotateZ(180deg);
+    }
+    100% {
+        transform: translate(-50%, 0%) rotateZ(360deg);
+    }
+}

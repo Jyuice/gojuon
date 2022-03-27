@@ -1,0 +1,79 @@
+@lightColor: rgb(166, 194, 233);
+@middleColor: rgb(69, 125, 204);
+@darkColor: rgb(11, 40, 80);
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    color: aliceblue;
+    // background: rgb(3, 14, 29);
+    background-color: @lightColor;
+}
+
+// @media (max-width: 960px) {
+//     body {
+//         background-image: url('./static/background-col.jpg');
+//     }
+// }
+
+// @media (min-width: 960px) and (max-width: 1920px) {
+//     body {
+//         background-image: url('./static/background-row.jpg');
+//     }       
+// }
+
+#container {
+    #nav {
+        display: flex;
+        padding-top: 50px;
+        padding-left: 100px;
+        padding-bottom: 30px;
+        font-weight: bolder;
+        font-size: 1.2em;
+        // box-shadow: darken(@lightColor, 10%) 4px 4px 8px 4px;
+        box-shadow: rgba(255, 255, 255, .5) 4px 4px 8px 4px;
+        #nav-item {
+            margin-right: 60px;
+            cursor: pointer;
+        }
+        .active {
+            border-bottom: 2px solid #fff;
+        }
+    }
+    #bottom-img {
+        position: absolute;
+        width: 300px;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        >img {
+            width: 100%;
+        }
+    }
+    #main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        height: 40vh;
+        transform: translate(-50%, -50%);
+        font-weight: bolder;
+        #text {
+            font-size: 4em;
+        }
+        #btn {
+            margin-top: 30px;
+            padding: 10px 20px;
+            background-color: #fff;
+            border-radius: 30px;
+            color: rgb(3, 14, 29);
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+    }
+}
