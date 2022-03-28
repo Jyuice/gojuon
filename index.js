@@ -2,32 +2,16 @@ window.onload = function() {
 
     const body = document.getElementsByTagName('body')[0]
     // Home
-    const home = getDomById('home')
-    const nav = getDomById('nav')
-    const wrap = getDomById('nav-item-wrap')
-    const setting = getDomById('setting')
-    const model = getDomById('model')
-    const close = getDomById('close')
-    const main = getDomById('main')
-    const btn = getDomById('btn')
-    const img = getDomById('home-img')
+    const { home, nav, nav_item_wrap, setting, model, close, main, btn, home_img } = getDomById('home', 'nav', 'nav-item-wrap', 'setting', 'model', 'close', 'main', 'btn', 'home-img')
     const ranges = document.getElementsByClassName('range')
     const rangeVals = document.getElementsByClassName('range-val')
     // ready-page
-    const ready_page = getDomById('ready-page')
-    const interval = getDomById('interval')
+    const { ready_page, interval } = getDomById('ready-page', 'interval')
     // game-page
-    const game_page = getDomById('game-page')
-    const input = getDomById('input')
-    const ground = getDomById('ground')
-    // 分数计数器 
-    const score_contain = getDomById('score-contain')
-    const score = getDomById('score')
-    const live = getDomById('live')
+    const { game_page, input, ground, score_contain, score, live } = getDomById('game-page','input','ground', 'score-contain', 'score', 'live')
+    console.log(score_contain)
     // 分数展示器 
-    const score_show = getDomById('score-show')
-    const score_text = getDomById('score-text')
-    const score_btn = getDomById('score-btn')
+    const { score_show, score_text, score_btn } = getDomById('score-show','score-text','score-btn')
 
     let key = false
 
@@ -47,16 +31,16 @@ window.onload = function() {
 
         signUp_home() {
             // nav點擊事件
-            wrap.onclick = e => this.changeDifficulty(e)
+            nav_item_wrap.onclick = e => this.changeDifficulty(e)
             // 點擊開始按鈕
             btn.onclick = this.start
             // 點擊setting
             setting.onclick = function() {
-                img.src = './static/riuma_setting.png'
+                home_img.src = './static/riuma_setting.png'
                 model.style.display = 'block'
             }
             close.onclick = function() {
-                img.src = './static/riuma.png'
+                home_img.src = './static/riuma.png'
                 model.style.display = 'none'
             }
             // 滑块事件
@@ -107,7 +91,7 @@ window.onload = function() {
         start() {
             model.style.display = 'none'
             nav.classList.add('slide-up')
-            img.classList.add('slide-down')
+            home_img.classList.add('slide-down')
             main.classList.add('fade-out')
 
             setTimeout(() => {
@@ -118,7 +102,7 @@ window.onload = function() {
                 setTimeout(() => {
                     // 去除動畫的class
                     nav.classList.remove('slide-up')
-                    img.classList.remove('slide-down')
+                    home_img.classList.remove('slide-down')
                     main.classList.remove('fade-out')
                 }, 1000)
             }, 500)
@@ -419,10 +403,10 @@ window.onload = function() {
             game_page.style.display = 'none'
 
             home.style.display = 'block'
-            img.src = './static/riuma.png'
+            home_img.src = './static/riuma.png'
 
             nav.classList.add('slide-down-back')
-            img.classList.add('slide-up-back')
+            home_img.classList.add('slide-up-back')
             main.classList.add('fade-in')
 
             // this.cancel()
@@ -433,7 +417,7 @@ window.onload = function() {
         cancel() {
             console.log('cancel')
             nav.classList.remove('slide-down-back')
-            img.classList.remove('slide-up-back')
+            home_img.classList.remove('slide-up-back')
             main.classList.remove('fade-in')
 
             score_btn.onclick = null
@@ -705,6 +689,11 @@ function culculate(difficulty) {
     }
 }
 
-function getDomById(id) {
-    return document.getElementById(id)
+function getDomById() {
+    const obj = new Object()
+    for(let i = 0;i < arguments.length;i++) {
+        const temp = arguments[i].replace(/-/g, "_")
+        obj[temp] = document.getElementById(arguments[i])
+    }
+    return obj
 }
