@@ -28,10 +28,10 @@ window.onload = function() {
     class Home {
         constructor() {
             this.difficulty = 0 // 等級 0 1 2 3 4 5
-            this.signUp_home()
+            this.signUp()
         }
 
-        signUp_home() {
+        signUp() {
             // nav點擊事件
             nav.addEventListener('click', e => this.changeDifficulty(e))
             nav.removeEventListener('click', this.changeDifficulty)
@@ -176,20 +176,19 @@ window.onload = function() {
             this.timeout = null
             this.timer = null
 
-            this.init_game()
-            this.start_game()
-            this.signUp_game()
+            this.init()
+            this.start()
+            this.signUp()
         }
 
-        signUp_game() {
-            console.log('执行了sign')
+        signUp() {
             // 打字事件
-            window.onkeydown = e => this.handle(e)
+            window.addEventListener('keydown', e => this.handle(e))
             area.addEventListener('click', this.focus)
         }
 
         // 初始化頁面上的分數和生命值 以及目前的UI樣式和題庫
-        init_game() {
+        init() {
             this.difficulty = h.difficulty
             score.innerHTML = this.score
             live.innerHTML = this.live
@@ -209,6 +208,16 @@ window.onload = function() {
         focus() {
             input.style.display = 'block'
             input.focus()
+        }
+
+        // 游戲開始
+        start() {
+            this.focus()
+            this.firstSecond()
+            // 隨機時間產生元素
+            this.timer = setInterval(() => {
+                this.firstSecond()
+            }, this.getRandom(1, this.int) * 1000)
         }
 
         // 游戲開始的時候馬上就要執行掉落一個，防止間隔太長導致的頁面空白
@@ -241,26 +250,15 @@ window.onload = function() {
             }, speed * 1000)
         }
 
-        // 游戲開始
-        start_game() {
-            this.focus()
-            this.firstSecond()
-            // 隨機時間產生元素
-            this.timer = setInterval(() => {
-                this.firstSecond()
-            }, this.getRandom(1, this.int) * 1000)
-        }
-
         stopInterval() {
             clearInterval(this.timer)
             clearTimeout(this.timeout)
             this.timer = null
             this.timeout = null
             area.remove()
-            // window.removeEventListener('keydown', e => this.handle(e))
+            // window.removeEventListener('keydown', e => this.handle(e)
             window.onkeydown = null
-            window.onkeyup = null
-            this.end_game()
+            this.end()
         }
 
         createNode() {
@@ -325,12 +323,12 @@ window.onload = function() {
 
         // 處理鍵盤輸入事件
         handle(e) {
-            console.log(this.curVals)
             if(!key && e.key === 'Enter') {
                 const val = input.value
                 if(val === '') return
                 input.value = ''
                 // 答對了！
+                console.log(this.curVals)
                 if(this.curVals.has(val)) {
                     score.innerHTML = ++this.score
                     const children = area.children
@@ -348,15 +346,13 @@ window.onload = function() {
                 }
                 key = true
             }
-
-            window.onkeyup = () => {
+            window.addEventListener('keyup', () => {
                 key = false
-
-            }
+            })
         }
 
         // 游戲結束
-        end_game() {
+        end() {
             input.style.display = 'none'
             score_contain.style.display = 'none'
             ground.classList.add('flow-up')

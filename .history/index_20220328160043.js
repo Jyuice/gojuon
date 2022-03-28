@@ -176,8 +176,8 @@ window.onload = function() {
             this.timeout = null
             this.timer = null
 
-            this.init_game()
-            this.start_game()
+            this.init()
+            this.start()
             this.signUp_game()
         }
 
@@ -189,7 +189,7 @@ window.onload = function() {
         }
 
         // 初始化頁面上的分數和生命值 以及目前的UI樣式和題庫
-        init_game() {
+        init() {
             this.difficulty = h.difficulty
             score.innerHTML = this.score
             live.innerHTML = this.live
@@ -242,7 +242,7 @@ window.onload = function() {
         }
 
         // 游戲開始
-        start_game() {
+        start() {
             this.focus()
             this.firstSecond()
             // 隨機時間產生元素
@@ -260,7 +260,7 @@ window.onload = function() {
             // window.removeEventListener('keydown', e => this.handle(e))
             window.onkeydown = null
             window.onkeyup = null
-            this.end_game()
+            this.end()
         }
 
         createNode() {
@@ -356,7 +356,7 @@ window.onload = function() {
         }
 
         // 游戲結束
-        end_game() {
+        end() {
             input.style.display = 'none'
             score_contain.style.display = 'none'
             ground.classList.add('flow-up')
