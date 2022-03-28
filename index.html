@@ -1,65 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>怒學五十音</title>
-    <link rel="stylesheet" href="./index.css">
-</head>
-<body class="light">
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body class="light">
     <div id="container">
-        <div id="home">
-            <div id="nav" class="light">
-                <div data-no="0" id="nav-item" class="active">簡単</div>
-                <div data-no="1" id="nav-item">中等</div>
-                <div data-no="2" id="nav-item">略難</div>
-                <div data-no="3" id="nav-item">艱難</div>
-                <div data-no="4" id="nav-item">超難</div>
-                <div data-no="5" id="nav-item">地獄</div>
-            </div>
-            <div id="main" class="center">
-                <div id="text">
-                    準備はいいですか?
-                </div>
-                <div id="btn">
-                    start →
+      <div id="home">
+        <div id="nav" class="light">
+          <div id="nav-item-wrap">
+            <div data-no="0" id="nav-item" class="active">簡単</div>
+            <div data-no="1" id="nav-item">中等</div>
+            <div data-no="2" id="nav-item">略難</div>
+            <div data-no="3" id="nav-item">艱難</div>
+            <div data-no="4" id="nav-item">超難</div>
+            <div data-no="5" id="nav-item">地獄</div>
+          </div>
+          <div id="setting">
+            <svg
+              t="1648470156986"
+              class="icon"
+              viewBox="0 0 1024 1024"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              p-id="1932"
+              width="20"
+              height="20"
+            >
+              <path
+                d="M919.6 405.6l-57.2-8c-12.7-1.8-23-10.4-28-22.1-11.3-26.7-25.7-51.7-42.9-74.5-7.7-10.2-10-23.5-5.2-35.3l21.7-53.5c6.7-16.4 0.2-35.3-15.2-44.1L669.1 96.6c-15.4-8.9-34.9-5.1-45.8 8.9l-35.4 45.3c-7.9 10.2-20.7 14.9-33.5 13.3-14-1.8-28.3-2.8-42.8-2.8-14.5 0-28.8 1-42.8 2.8-12.8 1.6-25.6-3.1-33.5-13.3l-35.4-45.3c-10.9-14-30.4-17.8-45.8-8.9L230.4 168c-15.4 8.9-21.8 27.7-15.2 44.1l21.7 53.5c4.8 11.9 2.5 25.1-5.2 35.3-17.2 22.8-31.7 47.8-42.9 74.5-5 11.8-15.3 20.4-28 22.1l-57.2 8C86 408 72.9 423 72.9 440.8v142.9c0 17.7 13.1 32.7 30.6 35.2l57.2 8c12.7 1.8 23 10.4 28 22.1 11.3 26.7 25.7 51.7 42.9 74.5 7.7 10.2 10 23.5 5.2 35.3l-21.7 53.5c-6.7 16.4-0.2 35.3 15.2 44.1L354 927.8c15.4 8.9 34.9 5.1 45.8-8.9l35.4-45.3c7.9-10.2 20.7-14.9 33.5-13.3 14 1.8 28.3 2.8 42.8 2.8 14.5 0 28.8-1 42.8-2.8 12.8-1.6 25.6 3.1 33.5 13.3l35.4 45.3c10.9 14 30.4 17.8 45.8 8.9l123.7-71.4c15.4-8.9 21.8-27.7 15.2-44.1l-21.7-53.5c-4.8-11.8-2.5-25.1 5.2-35.3 17.2-22.8 31.7-47.8 42.9-74.5 5-11.8 15.3-20.4 28-22.1l57.2-8c17.6-2.5 30.6-17.5 30.6-35.2V440.8c0.2-17.8-12.9-32.8-30.5-35.2z m-408 245.5c-76.7 0-138.9-62.2-138.9-138.9s62.2-138.9 138.9-138.9 138.9 62.2 138.9 138.9-62.2 138.9-138.9 138.9z"
+                fill="#ffffff"
+                p-id="1933"
+              ></path>
+            </svg>
+          </div>
+        </div>
+        <div id="main" class="center">
+          <div id="text">準備はいいですか?</div>
+          <div id="btn">start →</div>
+        </div>
+        <div id="foot">
+            <div id="model">
+                <div>你可以设置生命值：<b class="range-val">5</b></div>
+                <input class="range" type="range" value="5" max="10" min="1">
+                <div>你可以设置元素掉落的最小速度：<b class="range-val">5</b></div>
+                <input class="range" type="range" value="5" max="10" min="3">
+                <div>你可以设置元素掉落的最大速度：<b class="range-val">10</b></div>
+                <input class="range" type="range" value="10" max="20" min="5">
+                <div>你可以设置元素掉落的间隔：<b class="range-val">6</b></div>
+                <input class="range" type="range" value="6" max="10" min="3">
+                <div id="close">
+                    よし! →
                 </div>
             </div>
             <div id="bottom-img">
-                <img id="home-img" src="./static/riuma.png" alt="">
+              <img id="home-img" src="./static/riuma.png" alt="" />
             </div>
         </div>
+      </div>
 
-        <div id="ready-page">
-            <div id="interval" class="interval center"></div>
-        </div>
+      <div id="ready-page">
+        <div id="interval" class="interval center"></div>
+      </div>
 
-        <div id="game-page">
-            <input autocomplete="off" autofocus id="input" class="center" type="text">
-            <!-- <div id="area"> -->
-                <!-- <div id="item" class="light">
+      <div id="game-page">
+        <input
+          autocomplete="off"
+          autofocus
+          id="input"
+          class="center"
+          type="text"
+        />
+        <!-- <div id="area"> -->
+        <!-- <div id="item" class="light">
                     あ
                 </div> -->
-            <!-- </div> -->
-            <div id="ground">
-                <div id="wave"></div>
-            </div>
-            <div id="score-show" class="center">
-                <div id="score-text"></div>
-                <div id="score-btn">次のステップ→</div>
-            </div>
-            <div id="score-contain">
-                <div>
-                    當前得分：<span id="score"></span>
-                </div>
-                <div>
-                    生命值：<span id="live"></span>
-                </div>
-            </div>
+        <!-- </div> -->
+        <div id="ground">
+          <div id="wave"></div>
         </div>
+        <div id="score-show" class="center">
+          <div id="score-text"></div>
+          <div id="score-btn">次のステップ→</div>
+        </div>
+        <div id="score-contain">
+          <div>當前得分：<span id="score"></span></div>
+          <div>生命值：<span id="live"></span></div>
+        </div>
+      </div>
     </div>
 
     <script src="./index.js"></script>
-</body>
+  </body>
 </html>

@@ -4,9 +4,15 @@ window.onload = function() {
     // Home
     const home = getDomById('home')
     const nav = getDomById('nav')
+    const wrap = getDomById('nav-item-wrap')
+    const setting = getDomById('setting')
+    const model = getDomById('model')
+    const close = getDomById('close')
     const main = getDomById('main')
     const btn = getDomById('btn')
     const img = getDomById('home-img')
+    const ranges = document.getElementsByClassName('range')
+    const rangeVals = document.getElementsByClassName('range-val')
     // ready-page
     const ready_page = getDomById('ready-page')
     const interval = getDomById('interval')
@@ -25,7 +31,13 @@ window.onload = function() {
 
     let key = false
 
-    
+    // 初始化游戏的设置
+    let params = {
+        live: 5,
+        minSpeed: 5,
+        maxSpeed: 10,
+        int: 6
+    }
 
     class Home {
         constructor() {
@@ -35,17 +47,32 @@ window.onload = function() {
 
         signUp_home() {
             // nav點擊事件
-            nav.addEventListener('click', e => this.changeDifficulty(e))
-            nav.removeEventListener('click', this.changeDifficulty)
-
+            wrap.onclick = e => this.changeDifficulty(e)
             // 點擊開始按鈕
-            btn.addEventListener('click', this.start)
+            btn.onclick = this.start
+            // 點擊setting
+            setting.onclick = function() {
+                img.src = './static/riuma_setting.png'
+                model.style.display = 'block'
+            }
+            close.onclick = function() {
+                img.src = './static/riuma.png'
+                model.style.display = 'none'
+            }
+            // 滑块事件
+            for(let i = 0;i < ranges.length;i++) {
+                ranges[i].oninput = function() {
+                    let val = ranges[i].value
+                    rangeVals[i].innerHTML = val
+                    params[Object.keys(params)[i]] = Number(val)
+                }
+            }
         }
 
         // 點擊 nav 的難度時添加下劃綫
         changeDifficulty(e) {
             const el = e.target
-            if(el.id === 'nav') return
+            if(el.id === 'nav-item-wrap') return
             this.difficulty = Number(el.dataset.no)
             this.clearUnactive()
             el.className += 'active'
@@ -78,6 +105,7 @@ window.onload = function() {
         // 游戲部分邏輯
         // 點擊開始按鈕，游戲開始
         start() {
+            model.style.display = 'none'
             nav.classList.add('slide-up')
             img.classList.add('slide-down')
             main.classList.add('fade-out')
@@ -152,25 +180,26 @@ window.onload = function() {
             setTimeout(() => {
                 ground.classList.remove('slide-into')
             }, 1000)
-            new Game()
+            new Game(params)
         }
     }
 
 
     // 游戲的邏輯
     class Game extends Home {
-        constructor() {
+        constructor({ live, minSpeed, maxSpeed, int}) {
             super() // 繼承了difficulty
             this.score = 0 // 一共正確了多少個
-            this.live = 2 // 剩餘可錯誤的次數
+            this.live = live // 剩餘可錯誤的次數
             this.bank = null // 剩餘的題庫
             this.keys = null // bank's keys
             this.allVals = new Map() // 保存所有的題庫
             this.curVals = new Map() // 當前頁面上存在的元素的答案合集
             this.wrong = new Map() // 收集打錯的以便最後展示復習
             this.class = 'light' // 主題
-            this.int = 6 // 掉落的時間間隔
-            this.speed = 5 // 最短的掉落速度
+            this.int = int // 掉落的時間間隔
+            this.minSpeed = minSpeed // 最短的掉落速度
+            this.maxSpeed = maxSpeed // 最短的掉落速度
             this.timeout = null
             this.timer = null
 
@@ -278,7 +307,7 @@ window.onload = function() {
             // 為node安排一個隨機的掉落地點，距離左邊0 ~ 頁面寬度-自己的寬度
             const left = this.getRandom(0, clientWidth-80)
             // 為node安排一個掉落速度？也就是動畫的時間
-            const speed = this.getRandom(this.speed, this.speed+10)
+            const speed = this.getRandom(this.minSpeed, this.maxSpeed)
             // 為node安排一個隨機的字符
             const index = this.getRandom(0, this.keys.length)
             const key = this.keys[index]
@@ -390,6 +419,7 @@ window.onload = function() {
             game_page.style.display = 'none'
 
             home.style.display = 'block'
+            img.src = './static/riuma.png'
 
             nav.classList.add('slide-down-back')
             img.classList.add('slide-up-back')

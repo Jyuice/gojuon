@@ -32,18 +32,27 @@ body {
 }
 #container #home #nav {
   display: flex;
+  justify-content: space-around;
   padding-top: 50px;
+}
+#container #home #nav #nav-item-wrap {
+  width: 100%;
+  display: flex;
   padding-left: 100px;
   padding-bottom: 30px;
   font-weight: bolder;
   font-size: 1.2em;
 }
-#container #home #nav #nav-item {
+#container #home #nav #nav-item-wrap #nav-item {
   margin-right: 60px;
   cursor: pointer;
 }
-#container #home #nav .active {
+#container #home #nav #nav-item-wrap .active {
   border-bottom: 2px solid #fff;
+}
+#container #home #nav #setting {
+  padding-right: 100px;
+  cursor: pointer;
 }
 #container #home #wrong {
   display: none;
@@ -99,14 +108,64 @@ body {
   background-color: #010307;
   box-shadow: #000000 4px 4px 8px 4px;
 }
-#container #home #bottom-img {
+#container #home #foot {
   position: absolute;
-  width: 300px;
+  display: flex;
+  justify-content: center;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  width: 100%;
 }
-#container #home #bottom-img > img {
+#container #home #foot #model {
+  display: none;
+  position: absolute;
+  margin-right: 600px;
+  padding: 20px;
+  border-radius: 20px;
+  background-color: aliceblue;
+  color: #3d3d3d;
+}
+#container #home #foot #model::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 40px;
+  right: -30px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 30px 30px 0 0;
+  border-color: aliceblue transparent transparent transparent;
+}
+#container #home #foot #model input[type=range] {
+  -webkit-appearance: none;
+  border-radius: 10px;
+}
+#container #home #foot #model input[type=range]::-webkit-slider-runnable-track {
+  background-color: #817a7a;
+  height: 3px;
+  border-radius: 10px;
+}
+#container #home #foot #model input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  margin-top: -3px;
+  border-radius: 50%;
+  border: 2px solid #617dd8;
+  background-color: aliceblue;
+}
+#container #home #foot #model #close {
+  text-decoration: underline;
+  border-radius: 10px;
+  font-weight: bold;
+  color: #617dd8;
+  text-align: right;
+  cursor: pointer;
+}
+#container #home #foot #bottom-img {
+  width: 300px;
+}
+#container #home #foot #bottom-img > img {
   width: 100%;
 }
 #container #home #main {
