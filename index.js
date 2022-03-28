@@ -25,6 +25,8 @@ window.onload = function() {
 
     let key = false
 
+    
+
     class Home {
         constructor() {
             this.difficulty = 0 // 等級 0 1 2 3 4 5
@@ -94,10 +96,6 @@ window.onload = function() {
             }, 500)
         }
     }
-
-    let h = new Home()
-
-    // h.showWrong()
 
     // 漣漪動畫
     class ripple {
@@ -182,7 +180,6 @@ window.onload = function() {
         }
 
         signUp_game() {
-            console.log('执行了sign')
             // 打字事件
             window.onkeydown = e => this.handle(e)
             area.addEventListener('click', this.focus)
@@ -195,13 +192,7 @@ window.onload = function() {
             live.innerHTML = this.live
             this.class = this.getUI()
             this.curVals.clear()
-            // this.bank = culculate(this.difficulty)
-            this.bank = new Map([
-                ['a', 'あ'],
-                ['i', 'い'],
-                ['u', 'う'],
-                ['e', 'え'],
-            ])
+            this.bank = culculate(this.difficulty)
             this.allVals = new Map([...this.bank])
             this.keys = [...this.bank.keys()]
         }
@@ -211,13 +202,20 @@ window.onload = function() {
             input.focus()
         }
 
+        // 游戲開始
+        start_game() {
+            this.focus()
+            this.firstSecond()
+            // 隨機時間產生元素
+            this.timer = setInterval(() => {
+                this.firstSecond()
+            }, this.getRandom(1, this.int) * 1000)
+        }
+
         // 游戲開始的時候馬上就要執行掉落一個，防止間隔太長導致的頁面空白
         firstSecond() {
             // 全部回答完畢了 就不要再創建元素了
-            if(this.bank.size <= 0) {
-                this.stopInterval()
-                return
-            }
+            if(this.bank.size <= 0) return
             // 創建元素
             const { node, key, speed } = this.createNode()
             // 未回答成功的元素消失後就應該移除
@@ -241,25 +239,11 @@ window.onload = function() {
             }, speed * 1000)
         }
 
-        // 游戲開始
-        start_game() {
-            this.focus()
-            this.firstSecond()
-            // 隨機時間產生元素
-            this.timer = setInterval(() => {
-                this.firstSecond()
-            }, this.getRandom(1, this.int) * 1000)
-        }
-
         stopInterval() {
             clearInterval(this.timer)
             clearTimeout(this.timeout)
             this.timer = null
             this.timeout = null
-            area.remove()
-            // window.removeEventListener('keydown', e => this.handle(e))
-            window.onkeydown = null
-            window.onkeyup = null
             this.end_game()
         }
 
@@ -267,7 +251,14 @@ window.onload = function() {
             const node = document.createElement('div')
             node.id = 'item'
             node.className = this.class
-            const { left, speed, key, value } = this.culculate()
+            const { left, speed, key, value, index } = this.culculate()
+            // 已經安排過的字符在bank中刪除，keys中也要刪除
+            this.bank.delete(key)
+            this.keys.splice(index, 1)
+            // 現在創建的元素是bank中的最後一個，那麽在該元素完全掉落后才清除定時器
+            if(this.bank.size === 0) {
+                setTimeout(() => this.stopInterval(), speed * 1000)
+            }
             // 將該字符的答案加入答案集合中
             this.curVals.set(key, value)
             node.style.cssText += `
@@ -292,13 +283,7 @@ window.onload = function() {
             const index = this.getRandom(0, this.keys.length)
             const key = this.keys[index]
             const value = this.bank.get(key)
-            // 已經安排過的字符在bank中刪除，keys中也要刪除
-            this.bank.delete(key)
-            this.keys.splice(index, 1)
-
-            console.log(this.curVals)
-
-            return { left, speed, key, value }
+            return { left, speed, key, value, index }
         }
 
         // 移除元素
@@ -325,7 +310,6 @@ window.onload = function() {
 
         // 處理鍵盤輸入事件
         handle(e) {
-            console.log(this.curVals)
             if(!key && e.key === 'Enter') {
                 const val = input.value
                 if(val === '') return
@@ -357,6 +341,10 @@ window.onload = function() {
 
         // 游戲結束
         end_game() {
+            area.remove()
+            window.onkeydown = null
+            window.onkeyup = null
+
             input.style.display = 'none'
             score_contain.style.display = 'none'
             ground.classList.add('flow-up')
@@ -367,7 +355,8 @@ window.onload = function() {
                 // score_show.style.display = 'block'
                 score_show.classList.add('fade-in')
 
-                score_btn.addEventListener('click', this.exitAnimation)
+                // 要用箭頭函數 否則exitAnimation中訪問到的 this 是 score_btn 這個 dom
+                score_btn.onclick = () => this.exitAnimation()
 
                 // 顯示錯題本
                 if(this.wrong.size) {
@@ -406,40 +395,22 @@ window.onload = function() {
             img.classList.add('slide-up-back')
             main.classList.add('fade-in')
 
+            // this.cancel()
             setTimeout(this.cancel, 1000)
         }
 
         // 消除退出到Home時 Home中組件的動畫
         cancel() {
+            console.log('cancel')
             nav.classList.remove('slide-down-back')
             img.classList.remove('slide-up-back')
             main.classList.remove('fade-in')
 
-            score_btn.removeEventListener('click', this.exitAnimation)
+            score_btn.onclick = null
         }
-        
     }
 
-    // 释放内存，暂时不用用到
-    function release() {
-        body = null
-        nav = null
-        score = null
-        live = null
-        input = null
-        score = null
-        ground = null
-        home = null
-        game_page = null
-        img = null
-        main = null
-        btn = null
-        ready_page = null
-        interval = null
-    }
-
-    // g = new Game()
-
+    let h = new Home()
 }
 
 
