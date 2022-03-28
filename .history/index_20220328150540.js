@@ -176,9 +176,10 @@ window.onload = function() {
             this.timeout = null
             this.timer = null
 
+            this.signUp()
             this.init()
             this.start()
-            this.signUp()
+
         }
 
         signUp() {
@@ -193,7 +194,6 @@ window.onload = function() {
             score.innerHTML = this.score
             live.innerHTML = this.live
             this.class = this.getUI()
-            this.curVals.clear()
             // this.bank = culculate(this.difficulty)
             this.bank = new Map([
                 ['a', 'あ'],
@@ -201,6 +201,7 @@ window.onload = function() {
                 ['u', 'う'],
                 ['e', 'え'],
             ])
+            console.log(this.bank)
             this.allVals = new Map([...this.bank])
             this.keys = [...this.bank.keys()]
         }
@@ -256,8 +257,7 @@ window.onload = function() {
             this.timer = null
             this.timeout = null
             area.remove()
-            // window.removeEventListener('keydown', e => this.handle(e)
-            window.onkeydown = null
+            window.removeEventListener('keydown', e => this.handle(e))
             this.end()
         }
 
@@ -277,7 +277,6 @@ window.onload = function() {
 
         // 為新增的node計算一些屬性，同時獲得node的問題和答案
         culculate() {
-            // this.curVals.clear()
             // 當前頁面的寬度
             const clientWidth = document.documentElement.clientWidth
             // 為node安排一個隨機的掉落地點，距離左邊0 ~ 頁面寬度-自己的寬度
@@ -293,8 +292,6 @@ window.onload = function() {
             // 已經安排過的字符在bank中刪除，keys中也要刪除
             this.bank.delete(key)
             this.keys.splice(index, 1)
-
-            console.log(this.curVals)
 
             return { left, speed, key, value }
         }
@@ -324,12 +321,12 @@ window.onload = function() {
         // 處理鍵盤輸入事件
         handle(e) {
             if(!key) {
+                console.log(e)
                 if(e.key === 'Enter') {
                     const val = input.value
                     if(val === '') return
                     input.value = ''
                     // 答對了！
-                    console.log(this.curVals)
                     if(this.curVals.has(val)) {
                         score.innerHTML = ++this.score
                         const children = area.children
@@ -368,16 +365,14 @@ window.onload = function() {
                 score_btn.addEventListener('click', this.exitAnimation)
 
                 // 顯示錯題本
-                if(this.wrong.size) {
-                    const book = document.createElement('div')
-                    book.id = 'book'
-                    for(let [key, val] of this.wrong.entries()) {
-                        const p = document.createElement('p')
-                        p.innerHTML = `${key} - ${val}`
-                        book.appendChild(p)
-                    }
-                    score_show.appendChild(book)
+                const book = document.createElement('div')
+                book.id = 'book'
+                for(let [key, val] of this.wrong.entries()) {
+                    const p = document.createElement('p')
+                    p.innerHTML = `${key} - ${val}`
+                    book.appendChild(p)
                 }
+                score_show.appendChild(book)
 
             }, 3000)
         }
@@ -392,9 +387,7 @@ window.onload = function() {
             ground.classList.remove('flow-up')
             score_show.classList.remove(this.class)
             // score_show.style.display = 'none'
-            if(score_show.lastElementChild.id === 'book') {
-                score_show.removeChild(book)
-            }
+            score_show.removeChild(book)
             score_show.classList.remove('fade-in')
             game_page.style.display = 'none'
 

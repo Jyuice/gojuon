@@ -392,9 +392,7 @@ window.onload = function() {
             ground.classList.remove('flow-up')
             score_show.classList.remove(this.class)
             // score_show.style.display = 'none'
-            if(score_show.lastElementChild.id === 'book') {
-                score_show.removeChild(book)
-            }
+            score_show.removeChild(book)
             score_show.classList.remove('fade-in')
             game_page.style.display = 'none'
 

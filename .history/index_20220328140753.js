@@ -23,8 +23,6 @@ window.onload = function() {
     const score_text = getDomById('score-text')
     const score_btn = getDomById('score-btn')
 
-    let key = false
-
     class Home {
         constructor() {
             this.difficulty = 0 // 等級 0 1 2 3 4 5
@@ -144,7 +142,6 @@ window.onload = function() {
             let ground = document.getElementById('ground')
             game_page.style.display = 'block'
             ground.classList.add('slide-into')
-            score_contain.style.display = 'block'
 
             // 插入area區域
             const area = document.createElement('div')
@@ -176,9 +173,10 @@ window.onload = function() {
             this.timeout = null
             this.timer = null
 
+            this.signUp()
             this.init()
             this.start()
-            this.signUp()
+
         }
 
         signUp() {
@@ -193,14 +191,7 @@ window.onload = function() {
             score.innerHTML = this.score
             live.innerHTML = this.live
             this.class = this.getUI()
-            this.curVals.clear()
-            // this.bank = culculate(this.difficulty)
-            this.bank = new Map([
-                ['a', 'あ'],
-                ['i', 'い'],
-                ['u', 'う'],
-                ['e', 'え'],
-            ])
+            this.bank = culculate(this.difficulty)
             this.allVals = new Map([...this.bank])
             this.keys = [...this.bank.keys()]
         }
@@ -222,11 +213,6 @@ window.onload = function() {
 
         // 游戲開始的時候馬上就要執行掉落一個，防止間隔太長導致的頁面空白
         firstSecond() {
-            // 全部回答完畢了 就不要再創建元素了
-            if(this.bank.size <= 0) {
-                this.stopInterval()
-                return
-            }
             // 創建元素
             const { node, key, speed } = this.createNode()
             // 未回答成功的元素消失後就應該移除
@@ -239,26 +225,21 @@ window.onload = function() {
                         this.wrong.set(key, this.curVals.get(key))
                         this.removeNode(node, key)
 
-                        // 假如已經沒命了
-                        if(this.live <= 0) {
-                            this.stopInterval()
+                        // 假如已經沒命了或者全部回答完畢了
+                        if(this.live <= 0 || this.bank.size <= 0) {
+                            clearInterval(this.timer)
+                            area.remove()
+                            clearTimeout(this.timeout)
+                            this.timer = null
+                            this.timeout = null
+                            window.removeEventListener('keydown', e => this.handle(e))
+                            this.end()
                         }
                     }
                 } catch(err) {
                     return
                 }
             }, speed * 1000)
-        }
-
-        stopInterval() {
-            clearInterval(this.timer)
-            clearTimeout(this.timeout)
-            this.timer = null
-            this.timeout = null
-            area.remove()
-            // window.removeEventListener('keydown', e => this.handle(e)
-            window.onkeydown = null
-            this.end()
         }
 
         createNode() {
@@ -277,7 +258,6 @@ window.onload = function() {
 
         // 為新增的node計算一些屬性，同時獲得node的問題和答案
         culculate() {
-            // this.curVals.clear()
             // 當前頁面的寬度
             const clientWidth = document.documentElement.clientWidth
             // 為node安排一個隨機的掉落地點，距離左邊0 ~ 頁面寬度-自己的寬度
@@ -293,8 +273,6 @@ window.onload = function() {
             // 已經安排過的字符在bank中刪除，keys中也要刪除
             this.bank.delete(key)
             this.keys.splice(index, 1)
-
-            console.log(this.curVals)
 
             return { left, speed, key, value }
         }
@@ -323,34 +301,27 @@ window.onload = function() {
 
         // 處理鍵盤輸入事件
         handle(e) {
-            if(!key) {
-                if(e.key === 'Enter') {
-                    const val = input.value
-                    if(val === '') return
-                    input.value = ''
-                    // 答對了！
-                    console.log(this.curVals)
-                    if(this.curVals.has(val)) {
-                        score.innerHTML = ++this.score
-                        const children = area.children
-                        for(let i = 0;i < children.length;i++) {
-                            if(children[i].innerHTML === this.curVals.get(val)) {
-                                this.removeNode(children[i], val)
-                                break
-                            }
-                        }
-                    } else {
-                        // 答錯了放進錯題本裏，前提是打的發音是合法的
-                        if(this.allVals.has(val)) {
-                            this.wrong.set(val, this.allVals.get(val))
+            if(e.key === 'Enter') {
+                const val = input.value
+                if(val === '') return
+                input.value = ''
+                // 答對了！
+                if(this.curVals.has(val)) {
+                    score.innerHTML = ++this.score
+                    const children = area.children
+                    for(let i = 0;i < children.length;i++) {
+                        if(children[i].innerHTML === this.curVals.get(val)) {
+                            this.removeNode(children[i], val)
+                            break
                         }
                     }
+                } else {
+                    // 答錯了放進錯題本裏，前提是打的發音是合法的
+                    if(this.allVals.has(val)) {
+                        this.wrong.set(val, this.allVals.get(val))
+                    }
                 }
-                key = true
             }
-            window.addEventListener('keyup', () => {
-                key = false
-            })
         }
 
         // 游戲結束
@@ -358,26 +329,23 @@ window.onload = function() {
             input.style.display = 'none'
             score_contain.style.display = 'none'
             ground.classList.add('flow-up')
-            // flow 结束后 计分页面出现，提前設置背景色和内容
-            score_text.innerHTML = `${this.score}点おめでとうございます!`
-            score_show.classList.add(this.class)
+            // flow 结束后 计分页面出现
             setTimeout(() => {
-                // score_show.style.display = 'block'
-                score_show.classList.add('fade-in')
+                score_text.innerHTML = `${this.score}点おめでとうございます!`
+                score_show.classList.add(this.class)
+                score_show.style.display = 'block'
 
                 score_btn.addEventListener('click', this.exitAnimation)
 
                 // 顯示錯題本
-                if(this.wrong.size) {
-                    const book = document.createElement('div')
-                    book.id = 'book'
-                    for(let [key, val] of this.wrong.entries()) {
-                        const p = document.createElement('p')
-                        p.innerHTML = `${key} - ${val}`
-                        book.appendChild(p)
-                    }
-                    score_show.appendChild(book)
+                const book = document.createElement('div')
+                book.id = 'book'
+                for(let [key, val] of this.wrong.entries()) {
+                    const p = document.createElement('p')
+                    p.innerHTML = `${key} - ${val}`
+                    book.appendChild(p)
                 }
+                score_show.appendChild(book)
 
             }, 3000)
         }
@@ -388,27 +356,25 @@ window.onload = function() {
 
         // 从游戏界面回到 Home
         exitAnimation() {
-            // game_page消失之前就去除副作用
+            // game_page消失之前就要去除ground的副作用
             ground.classList.remove('flow-up')
-            score_show.classList.remove(this.class)
-            // score_show.style.display = 'none'
-            if(score_show.lastElementChild.id === 'book') {
-                score_show.removeChild(book)
-            }
-            score_show.classList.remove('fade-in')
             game_page.style.display = 'none'
 
+            score_show.classList.remove(this.class)
+            score_show.style.display = 'none'
             home.style.display = 'block'
 
             nav.classList.add('slide-down-back')
             img.classList.add('slide-up-back')
             main.classList.add('fade-in')
 
-            setTimeout(this.cancel, 1000)
+            setTimeout(() => {
+                this.exit()
+            }, 1000)
         }
 
-        // 消除退出到Home時 Home中組件的動畫
-        cancel() {
+        // 消除副作用
+        exit() {
             nav.classList.remove('slide-down-back')
             img.classList.remove('slide-up-back')
             main.classList.remove('fade-in')

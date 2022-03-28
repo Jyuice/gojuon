@@ -256,8 +256,7 @@ window.onload = function() {
             this.timer = null
             this.timeout = null
             area.remove()
-            // window.removeEventListener('keydown', e => this.handle(e)
-            window.onkeydown = null
+            window.removeEventListener('keydown', e => this.handle(e))
             this.end()
         }
 
@@ -368,16 +367,14 @@ window.onload = function() {
                 score_btn.addEventListener('click', this.exitAnimation)
 
                 // 顯示錯題本
-                if(this.wrong.size) {
-                    const book = document.createElement('div')
-                    book.id = 'book'
-                    for(let [key, val] of this.wrong.entries()) {
-                        const p = document.createElement('p')
-                        p.innerHTML = `${key} - ${val}`
-                        book.appendChild(p)
-                    }
-                    score_show.appendChild(book)
+                const book = document.createElement('div')
+                book.id = 'book'
+                for(let [key, val] of this.wrong.entries()) {
+                    const p = document.createElement('p')
+                    p.innerHTML = `${key} - ${val}`
+                    book.appendChild(p)
                 }
+                score_show.appendChild(book)
 
             }, 3000)
         }
@@ -392,9 +389,7 @@ window.onload = function() {
             ground.classList.remove('flow-up')
             score_show.classList.remove(this.class)
             // score_show.style.display = 'none'
-            if(score_show.lastElementChild.id === 'book') {
-                score_show.removeChild(book)
-            }
+            score_show.removeChild(book)
             score_show.classList.remove('fade-in')
             game_page.style.display = 'none'
 

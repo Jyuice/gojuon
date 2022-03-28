@@ -205,10 +205,10 @@ body {
   animation-duration: 9s;
 }
 #container #game-page #score-show {
-  display: none;
   font-size: 3em;
   font-weight: bolder;
   text-align: center;
+  opacity: 0;
 }
 #container #game-page #score-show #score-btn {
   font-size: 0.5em;
@@ -273,6 +273,9 @@ body {
   }
 }
 @keyframes slideDown {
+  from {
+    margin-bottom: 0;
+  }
   to {
     margin-bottom: -400px;
   }
@@ -299,6 +302,9 @@ body {
   }
 }
 @keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
   to {
     opacity: 1;
   }
