@@ -18,8 +18,8 @@ window.onload = function() {
     // 初始化游戏的设置
     let params = {
         live: 5,
-        minSpeed: 5,
-        maxSpeed: 10,
+        maxSpeed: 5,
+        minSpeed: 10,
         int: 6
     }
 
