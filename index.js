@@ -1,3 +1,9 @@
+/**
+ * author: Romanbin
+ * time: 2022-03-28
+ * github: https://github.com/Romanbin/gojuon.git
+ */
+
 window.onload = function() {
 
     const body = document.getElementsByTagName('body')[0]
@@ -9,8 +15,7 @@ window.onload = function() {
     const { ready_page, interval } = getDomById('ready-page', 'interval')
     // game-page
     const { game_page, input, ground, score_contain, score, live } = getDomById('game-page','input','ground', 'score-contain', 'score', 'live')
-    console.log(score_contain)
-    // 分数展示器 
+    // 分数展示器
     const { score_show, score_text, score_btn } = getDomById('score-show','score-text','score-btn')
 
     let key = false
@@ -18,14 +23,15 @@ window.onload = function() {
     // 初始化游戏的设置
     let params = {
         live: 5,
-        maxSpeed: 5,
-        minSpeed: 10,
+        minTime: 5,
+        maxTime: 10,
         int: 6
     }
 
+    let difficulty = 0 // 等級 0 1 2 3 4 5
+
     class Home {
         constructor() {
-            this.difficulty = 0 // 等級 0 1 2 3 4 5
             this.signUp_home()
         }
 
@@ -45,10 +51,20 @@ window.onload = function() {
             }
             // 滑块事件
             for(let i = 0;i < ranges.length;i++) {
-                ranges[i].oninput = function() {
+                ranges[i].oninput = function() {        
                     let val = ranges[i].value
                     rangeVals[i].innerHTML = val
-                    params[Object.keys(params)[i]] = Number(val)
+                    params[Object.keys(params)[i]] = Number(val)            
+                    // 如果调整的最小时间大于最大时间，那就要重设最小时间
+                    if(params.minTime > params.maxTime) {
+                        if(i === 1) {
+                            params.minTime = params.maxTime
+                            rangeVals[i].innerHTML = params.maxTime
+                        } else if(i === 2) {
+                            params.maxTime = params.minTime
+                            rangeVals[i].innerHTML = params.minTime
+                        }
+                    }
                 }
             }
         }
@@ -57,10 +73,11 @@ window.onload = function() {
         changeDifficulty(e) {
             const el = e.target
             if(el.id === 'nav-item-wrap') return
-            this.difficulty = Number(el.dataset.no)
+            difficulty = Number(el.dataset.no)
             this.clearUnactive()
             el.className += 'active'
             this.changeUI()
+            console.log(difficulty)
         }
         // 清楚上一個 active 的下劃綫
         clearUnactive() {
@@ -75,11 +92,11 @@ window.onload = function() {
         }
         // 獲取目前的主題
         getUI() {
-            return this.difficulty === 0 ? 'light' : (
-                this.difficulty === 1 ? 'middle' : (
-                    this.difficulty === 2 ? 'dark' : (
-                        this.difficulty === 3 ? 'mdark' : (
-                            this.difficulty === 4 ? 'ddark' : 'modark'
+            return difficulty === 0 ? 'light' : (
+                difficulty === 1 ? 'middle' : (
+                    difficulty === 2 ? 'dark' : (
+                        difficulty === 3 ? 'mdark' : (
+                            difficulty === 4 ? 'ddark' : 'modark'
                         )
                     )
                 )
@@ -98,7 +115,7 @@ window.onload = function() {
                 home.style.display = 'none'
                 ready_page.style.display = 'block'
                 // 漣漪動畫
-                new ripple(3)
+                let r = new ripple(3)
                 setTimeout(() => {
                     // 去除動畫的class
                     nav.classList.remove('slide-up')
@@ -108,6 +125,9 @@ window.onload = function() {
             }, 500)
         }
     }
+
+
+    var h = new Home()
 
     // 漣漪動畫
     class ripple {
@@ -164,14 +184,14 @@ window.onload = function() {
             setTimeout(() => {
                 ground.classList.remove('slide-into')
             }, 1000)
-            new Game(params)
+            let g = new Game(params)
         }
     }
 
 
     // 游戲的邏輯
     class Game extends Home {
-        constructor({ live, minSpeed, maxSpeed, int}) {
+        constructor({ live, minTime, maxTime, int }) {
             super() // 繼承了difficulty
             this.score = 0 // 一共正確了多少個
             this.live = live // 剩餘可錯誤的次數
@@ -182,8 +202,8 @@ window.onload = function() {
             this.wrong = new Map() // 收集打錯的以便最後展示復習
             this.class = 'light' // 主題
             this.int = int // 掉落的時間間隔
-            this.minSpeed = minSpeed // 最短的掉落速度
-            this.maxSpeed = maxSpeed // 最短的掉落速度
+            this.minTime = minTime // 最短的掉落速度
+            this.maxTime = maxTime // 最短的掉落速度
             this.timeout = null
             this.timer = null
 
@@ -200,12 +220,11 @@ window.onload = function() {
 
         // 初始化頁面上的分數和生命值 以及目前的UI樣式和題庫
         init_game() {
-            this.difficulty = h.difficulty
             score.innerHTML = this.score
             live.innerHTML = this.live
             this.class = this.getUI()
             this.curVals.clear()
-            this.bank = culculate(this.difficulty)
+            this.bank = culculate(difficulty)
             this.allVals = new Map([...this.bank])
             this.keys = [...this.bank.keys()]
         }
@@ -263,7 +282,8 @@ window.onload = function() {
         createNode() {
             const node = document.createElement('div')
             node.id = 'item'
-            node.className = this.class
+            console.log(this.class)
+            node.classList.add(this.class)
             const { left, speed, key, value, index } = this.culculate()
             // 已經安排過的字符在bank中刪除，keys中也要刪除
             this.bank.delete(key)
@@ -291,7 +311,7 @@ window.onload = function() {
             // 為node安排一個隨機的掉落地點，距離左邊0 ~ 頁面寬度-自己的寬度
             const left = this.getRandom(0, clientWidth-80)
             // 為node安排一個掉落速度？也就是動畫的時間
-            const speed = this.getRandom(this.minSpeed, this.maxSpeed)
+            const speed = this.getRandom(this.minTime, this.maxTime)
             // 為node安排一個隨機的字符
             const index = this.getRandom(0, this.keys.length)
             const key = this.keys[index]
@@ -415,7 +435,6 @@ window.onload = function() {
 
         // 消除退出到Home時 Home中組件的動畫
         cancel() {
-            console.log('cancel')
             nav.classList.remove('slide-down-back')
             home_img.classList.remove('slide-up-back')
             main.classList.remove('fade-in')
@@ -423,12 +442,7 @@ window.onload = function() {
             score_btn.onclick = null
         }
     }
-
-    let h = new Home()
 }
-
-
-
 
 
 const level1 = new Map([
