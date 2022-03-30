@@ -1,7 +1,7 @@
 /**
- * author: Romanbin
+ * author: Juice
  * time: 2022-03-28
- * github: https://github.com/Romanbin/gojuon.git
+ * github: https://github.com/Jyuice/gojuon.git
  */
 
 window.onload = function() {
@@ -445,7 +445,7 @@ window.onload = function() {
 }
 
 
-const level1 = new Map([
+const level0 = new Map([
     ['a', 'あ'],
     ['i', 'い'],
     ['u', 'う'],
@@ -494,7 +494,7 @@ const level1 = new Map([
     ['nn', 'ん'],
 ])
 
-const level2 = new Map([
+const level1 = new Map([
     ['a', 'ア'],
     ['i', 'イ'],
     ['u', 'ウ'],
@@ -543,7 +543,7 @@ const level2 = new Map([
     ['nn', 'ン'],
 ])
 
-const level3 = new Map([
+const level2 = new Map([
     ['da', 'だ'],
     ['di', 'ぢ'],
     ['du', 'づ'],
@@ -571,7 +571,7 @@ const level3 = new Map([
     ['po', 'ぽ'],
 ])
 
-const level4 = new Map([
+const level3 = new Map([
     ['da', 'ダ'],
     ['di', 'ヂ'],
     ['du', 'ヅ'],
@@ -599,7 +599,7 @@ const level4 = new Map([
     ['po', 'ポ'],
 ])
 
-const level5 = new Map([
+const level4 = new Map([
     ['kia', 'きゃ'],
     ['kiu', 'きゆ'],
     ['kio', 'きよ'],
@@ -639,7 +639,7 @@ const level5 = new Map([
     ['rio', 'りよ'],
 ])
 
-const level6 = new Map([
+const level5 = new Map([
     ['kia', 'キヤ'],
     ['kiu', 'キユ'],
     ['kio', 'キヨ'],
@@ -680,7 +680,7 @@ const level6 = new Map([
 ])
 
 
-const mapList = [[level1, level2], [level3, level4], [level5, level6]]
+const mapList = [level0, level1, level2, level3, level4, level5]
 
 /**
  *  difficulty   bank
@@ -694,13 +694,10 @@ const mapList = [[level1, level2], [level3, level4], [level5, level6]]
 
 // 返回當前難度下的bank
 function culculate(difficulty) {
-    if(difficulty === 0) return new Map([...mapList[0][0]])
-    if(difficulty === 1) return new Map([...mapList[0][1]])
-    if(!difficulty%2) {
-        return new Map([...mapList[difficulty/2][0], ...culculate(difficulty-2)])
-    } else {
-        return new Map([...mapList[Math.floor(difficulty/2)][1], ...culculate(difficulty-2)])
-    }
+    console.log(difficulty)
+    if(difficulty === 0) return new Map([...mapList[0]])
+    if(difficulty === 1) return new Map([...mapList[1]])
+    return new Map([...mapList[difficulty], ...culculate(difficulty-2)])
 }
 
 function getDomById() {
@@ -711,3 +708,5 @@ function getDomById() {
     }
     return obj
 }
+
+console.log(culculate(5))
