@@ -1,5 +1,9 @@
 # gojuon
 
+> 网址
+
+http://112.74.97.5/gojuon
+
 ## 首页
 可以在 nav 选择难度，点击 start 就可以开始游戏了
 ![image](https://user-images.githubusercontent.com/60843463/160287925-641c00a9-c9b7-48cd-848a-1b4135a74f69.png)
